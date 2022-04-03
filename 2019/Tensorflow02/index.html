@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CRoboto+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"smart-zhi.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Tensorflow框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tensorflow笔记（第二讲）">
+<meta property="og:url" content="https://smart-zhi.github.io/2019/Tensorflow02/">
+<meta property="og:site_name" content="Small box">
+<meta property="og:description" content="Tensorflow框架">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/0065saiygy1g4ss815wf7j30jd07fdg4.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/0065saiyly1g4tdq6lu5gj30t80bdjsb.jpg">
+<meta property="article:published_time" content="2019-07-08T13:06:54.000Z">
+<meta property="article:modified_time" content="2022-04-03T16:49:27.113Z">
+<meta property="article:author" content="smart zhi">
+<meta property="article:tag" content="MOOC">
+<meta property="article:tag" content="Tensorflow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/0065saiygy1g4ss815wf7j30jd07fdg4.jpg">
+
+
+<link rel="canonical" href="https://smart-zhi.github.io/2019/Tensorflow02/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://smart-zhi.github.io/2019/Tensorflow02/","path":"2019/Tensorflow02/","title":"Tensorflow笔记（第二讲）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Tensorflow笔记（第二讲） | Small box</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Small box</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">a small box for personal note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%A0%E9%87%8F%E3%80%81%E8%AE%A1%E7%AE%97%E5%9B%BE%E3%80%81%E4%BC%9A%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">张量、计算图、会话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%A0%E9%87%8F-tensor"><span class="nav-number">1.1.</span> <span class="nav-text">张量 (tensor)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE-graph"><span class="nav-number">1.2.</span> <span class="nav-text">计算图 (graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D-Session"><span class="nav-number">1.3.</span> <span class="nav-text">会话(Session)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">神经网络实现过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">3.</span> <span class="nav-text">前向传播</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD-1"><span class="nav-number">3.2.</span> <span class="nav-text">前向传播</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">4.</span> <span class="nav-text">反向传播</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0-loss"><span class="nav-number">4.1.</span> <span class="nav-text">损失函数(loss)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.</span> <span class="nav-text">搭建神经网络步骤</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="smart zhi"
+      src="/images/1.jpg">
+  <p class="site-author-name" itemprop="name">smart zhi</p>
+  <div class="site-description" itemprop="description">personal note</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Smart-zhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Smart-zhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1490295322@qq.com" title="E-Mail → mailto:1490295322@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://smart-zhi.github.io/2019/Tensorflow02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="smart zhi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Small box">
+      <meta itemprop="description" content="personal note">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Tensorflow笔记（第二讲） | Small box">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tensorflow笔记（第二讲）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-07-08 21:06:54" itemprop="dateCreated datePublished" datetime="2019-07-08T21:06:54+08:00">2019-07-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-04-04 00:49:27" itemprop="dateModified" datetime="2022-04-04T00:49:27+08:00">2022-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tensorflow/" itemprop="url" rel="index"><span itemprop="name">Tensorflow</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div class="note info">
+Tensorflow框架
+</div>
+
+<span id="more"></span>
+
+<h2 id="张量、计算图、会话"><a href="#张量、计算图、会话" class="headerlink" title="张量、计算图、会话"></a>张量、计算图、会话</h2><p>基于Tensorflow的NN：用张量表示数据，用计算图搭建神经网络，用会话执行计算图，优化线上的权重（参数），得到模型。</p>
+<h3 id="张量-tensor"><a href="#张量-tensor" class="headerlink" title="张量 (tensor)"></a>张量 (tensor)</h3><ul>
+<li>多维数组（列表），可表示 0~n 阶数组</li>
+<li>阶：张量的维数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>维数</th>
+<th>阶</th>
+<th>名字</th>
+<th align="center">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-D</td>
+<td>0</td>
+<td>标量 scalar</td>
+<td align="center"><code>s = 1 </code></td>
+</tr>
+<tr>
+<td>1-D</td>
+<td>1</td>
+<td>向量 vector</td>
+<td align="center"><code>v = [1, 2, 3]</code></td>
+</tr>
+<tr>
+<td>2-D</td>
+<td>2</td>
+<td>矩阵 matrix</td>
+<td align="center"><code>m = [[1, 2, 3], [4, 5, 6]]</code></td>
+</tr>
+<tr>
+<td>n-D</td>
+<td>n</td>
+<td>张量 tensor</td>
+<td align="center">$t&#x3D; \underbrace{[ [ [ }_{n个}\cdots$</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><figcaption><span>python2</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>])</span><br><span class="line">b = tf.constant([<span class="number">3.0</span>, <span class="number">4.0</span>])</span><br><span class="line">reuslt = a + b</span><br><span class="line"><span class="built_in">print</span> result </span><br><span class="line"></span><br><span class="line"><span class="comment"># Tensor(&quot;add:0&quot;, shape=(2,), dtype=float32)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="计算图-graph"><a href="#计算图-graph" class="headerlink" title="计算图 (graph)"></a>计算图 (graph)</h3><ul>
+<li>搭建神经网络的计算过程，只搭建，不运算<br><img src="https://ws1.sinaimg.cn/large/0065saiygy1g4ss815wf7j30jd07fdg4.jpg" alt="tensenflower005.jpg" title="计算图"></li>
+</ul>
+<h3 id="会话-Session"><a href="#会话-Session" class="headerlink" title="会话(Session)"></a>会话(Session)</h3><ul>
+<li>执行计算图中的节点运算</li>
+</ul>
+<figure class="highlight python"><figcaption><span>python2</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>])</span><br><span class="line">w = tf.constant([<span class="number">3.0</span>, <span class="number">4.0</span>])</span><br><span class="line">y = tf.matmul(x,w)</span><br><span class="line"><span class="built_in">print</span> y</span><br><span class="line"><span class="comment"># Tensor(&quot;matmul:0&quot;, shape(1,1), dtype=float32)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="built_in">print</span> sess.run(y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># [[11.]]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="神经网络实现过程"><a href="#神经网络实现过程" class="headerlink" title="神经网络实现过程"></a>神经网络实现过程</h2><blockquote>
+<ol>
+<li>准备数据集，提取特征，作为输入喂给神经网络</li>
+<li>搭建NN结构，从输入到输出（先搭建计算图，再用会话执行）<br>  （NN前向传播算法 $\Rightarrow$ 计算输出）</li>
+<li>大量特征数据喂给NN，迭代优化NN参数<br>  （NN反向传播算法 $\Rightarrow$ 优化参数训练模型）</li>
+<li>使用训练好的模型预测和分类</li>
+</ol>
+</blockquote>
+<h2 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>权重W, 用变量表示，随机给初值<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># W 随机生成方法</span></span><br><span class="line"></span><br><span class="line">w = tf.Variable(tf.random_normal([<span class="number">2</span>,<span class="number">3</span>], stddev = <span class="number">2</span>, mean = <span class="number">0</span>, seed = <span class="number">1</span>))</span><br><span class="line"><span class="comment"># tf.random_normal 正态分布 </span></span><br><span class="line"><span class="comment"># [2,3] 2*3矩阵</span></span><br><span class="line"><span class="comment"># stddev 标准差</span></span><br><span class="line"><span class="comment"># mean 均值</span></span><br><span class="line"><span class="comment"># seed 随机种子 随机种子相同，生成的随机数相同</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+<th align="center">示例</th>
+<th align="center">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tf.truncated_normal()</code></td>
+<td>去过大偏离点的正态分布</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td><code>tf.random_uniform()</code></td>
+<td>均匀分布</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td><code>tf.zeros()</code></td>
+<td>全0 数组</td>
+<td align="center"><code>tf.zeros([3,2], int32)</code></td>
+<td align="center"><code>[[0, 0], [0, 0], [0, 0]]</code></td>
+</tr>
+<tr>
+<td><code>tf.ones()</code></td>
+<td>全1 数组</td>
+<td align="center"><code>tf.ones([3,2], int32)</code></td>
+<td align="center"><code>[[1, 1], [1, 1], [1, 1]]</code></td>
+</tr>
+<tr>
+<td><code>tf.fill()</code></td>
+<td>全定值数组</td>
+<td align="center"><code>tf.fill([3,2], 6)</code></td>
+<td align="center"><code>[[6, 6], [6, 6], [6, 6]]</code></td>
+</tr>
+<tr>
+<td><code>tf.constant()</code></td>
+<td>直接给值</td>
+<td align="center"><code>tf.constant([3, 2, 1])</code></td>
+<td align="center"><code>[3, 2, 1]</code></td>
+</tr>
+</tbody></table>
+<h3 id="前向传播-1"><a href="#前向传播-1" class="headerlink" title="前向传播"></a>前向传播</h3><ul>
+<li>搭建模型，实现推理</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/0065saiyly1g4tdq6lu5gj30t80bdjsb.jpg" alt="tensenflower006.jpg" title="前向传播示例"></p>
+<ul>
+<li>$X$ 是输入为 $1×2$ 矩阵</li>
+<li>$ w^{(k)}_{i,j} $ 为待优化参数：$ i $ 为前节点编号、 $ j $ 后节点编号、 $ k $ 层数</li>
+</ul>
+<p>$$<br>W^{(1)} &#x3D;<br>\begin{bmatrix}<br>    w^{(1)}<em>{1,1} &amp; w^{(1)}</em>{1,2} &amp; w^{(1)}<em>{1,3} \<br>    w^{(1)}</em>{2,1} &amp; w^{(1)}<em>{2,2} &amp; w^{(1)}</em>{2,3} \<br>\end{bmatrix}<br>$$</p>
+<p>$$ a^{(1)} &#x3D;[a_{11}, a_{12},a_{13}] &#x3D; XW^{(1)} $$</p>
+<p>$$<br>W^{(2)} &#x3D;<br>\begin{bmatrix}<br>    w^{(2)}<em>{1,1} \<br>    w^{(2)}</em>{2,1} \<br>    w^{(2)}_{3,1} \<br>\end{bmatrix}<br>$$</p>
+<p>$$ y&#x3D;a^{(1)}W^{(1)} $$ </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">a = tf.matmul(X, W1)</span><br><span class="line">y = tf.matmul(a, W2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 变量初始化、计算图节点运，算都要用会话（with结构）实现</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 所有变量初始化：在sess.run函数中用tf.global_variables_initializer()</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算图节点运算：在sess.run函数中写入待运算的节点</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用tf.placeholder占位，在sess.run函数中用feed_dict喂数据</span></span><br><span class="line"><span class="comment"># 喂一组数据：</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape = (<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(y, feed_dic = &#123;x: [[<span class="number">0.5</span>, <span class="number">0.6</span>]]&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 喂多组数据：</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape = (<span class="literal">None</span>,<span class="number">2</span>))</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(y, feed_dic = &#123;x: [[<span class="number">0.1</span>, <span class="number">0.2</span>], [<span class="number">0.2</span>, <span class="number">0.3</span>], [<span class="number">0.3</span>, <span class="number">0.4</span>], [<span class="number">0.4</span>, <span class="number">0.5</span>]]&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>python2  example1</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 两层简单神经网络（全连接）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输入和参数</span></span><br><span class="line">x = tf.constant([[<span class="number">0.7</span>, <span class="number">0.5</span>]])</span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>, <span class="number">3</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>, <span class="number">1</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义前向传播</span></span><br><span class="line">a = tf.matmul(x, w1)</span><br><span class="line">y = tf.matmul(a, w2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用会话计算结果</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    ptint <span class="string">&quot;y is: &quot;</span>,sess.run(y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># y is [[3.0904665]]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>python2  example2</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 两层简单神经网络（全连接）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输入和参数</span></span><br><span class="line"><span class="comment"># 用placeholder 实现输入定义（sess.run 中喂一组数据）</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape = (<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>, <span class="number">3</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>, <span class="number">1</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义前向传播</span></span><br><span class="line">a = tf.matmul(x, w1)</span><br><span class="line">y = tf.matmul(a, w2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用会话计算结果</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    ptint <span class="string">&quot;y is: &quot;</span>,sess.run(y, feed_dict = &#123;x: [[<span class="number">0.7</span>, <span class="number">0.5</span>]]&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># y is [[3.0904665]]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>python2  example3</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 两层简单神经网络（全连接）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输入和参数</span></span><br><span class="line"><span class="comment"># 用placeholder 实现输入定义（sess.run 中喂多组数据）</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape = (<span class="literal">None</span>, <span class="number">2</span>))</span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>, <span class="number">3</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>, <span class="number">1</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义前向传播</span></span><br><span class="line">a = tf.matmul(x, w1)</span><br><span class="line">y = tf.matmul(a, w2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用会话计算结果</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    ptint <span class="string">&quot;y is: \n&quot;</span>,sess.run(y, feed_dict = &#123;x: [[<span class="number">0.7</span>, <span class="number">0.5</span>], [<span class="number">0.2</span>, <span class="number">0.3</span>], [<span class="number">0.3</span>, <span class="number">0.4</span>], [<span class="number">0.4</span>, <span class="number">0.5</span>]]&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># y is </span></span><br><span class="line"><span class="comment"># [[3.0904665]</span></span><br><span class="line"><span class="comment">#  [1.2236414]</span></span><br><span class="line"><span class="comment">#  [1.72707319]</span></span><br><span class="line"><span class="comment">#  [2.23050475]]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h2><p>训练模型参数，在所有参数上用梯度下降，使NN 模型在训练数据上的损失函数最小</p>
+<h3 id="损失函数-loss"><a href="#损失函数-loss" class="headerlink" title="损失函数(loss)"></a>损失函数(loss)</h3><p>预测值与已知答案的差距<br>均方误差MSE<br>$$ MSE(y_,y) &#x3D; \frac{\sum_{i&#x3D;1}^n(y-y_)^2}{n}$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss = tf.reduce_mean(tf.square(y_ - y))</span><br></pre></td></tr></table></figure>
+
+<p>反向传播训练方法：以减小loss 值为优化目标</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)</span><br><span class="line">train_step = tf.train.MomentumOptimizer(learning_rate, momentum). minimize(loss)</span><br><span class="line">train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)</span><br></pre></td></tr></table></figure>
+
+<p>学习率：决定参数每次更新幅度 （小一点 0.001）</p>
+<figure class="highlight python"><figcaption><span>python2  example4</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># 0 导入模块，生成模拟数据</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">BATCH_SIZE = <span class="number">8</span></span><br><span class="line">seed = <span class="number">23455</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于seed 产生随机数</span></span><br><span class="line">rng = np.random.RandomState(seed)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入数据集：随机数返回32行2列的矩阵  表示32组 体重和重量</span></span><br><span class="line">X = rng.rand(<span class="number">32</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入数据标签：从X取出一行，如果和小于1，给Y赋值1； 否则Y赋值0</span></span><br><span class="line">Y = [[<span class="built_in">int</span>(x0 + x1 &lt; <span class="number">1</span>)] <span class="keyword">for</span> (x0, x1) <span class="keyword">in</span> X]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1 定义神经网络的输入、参数和输出，定义前向传播过程</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape = (<span class="literal">None</span>, <span class="number">2</span>))</span><br><span class="line">y_ = tf.placeholder(tf.float32, shape = (<span class="literal">None</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">w1 = tf.Variable(tf.random_normal([<span class="number">2</span>, <span class="number">3</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line">w2 = tf.Variable(tf.random_normal([<span class="number">3</span>, <span class="number">1</span>], stddev = <span class="number">1</span>, seed = <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">a = tf.matmul(x, w1)</span><br><span class="line">y = tf.matmul(a, w2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 定义损失函数及反向传播方法</span></span><br><span class="line">loss = tf.reduce_mean(tf.square(y - y_))</span><br><span class="line">train_stpe = tf.train.GradientDescentOptimizer(<span class="number">0.001</span>).minimize(loss)</span><br><span class="line"><span class="comment"># train_step = tf.train.MomentumOptimizer(0.001, 0.9). minimize(loss)</span></span><br><span class="line"><span class="comment"># train_step = tf.train.AdamOptimizer(0.001).minimize(loss)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3 生成会话，训练STEPS轮</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    <span class="comment"># 输出未训练的参数值</span></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;w1:\n&quot;</span>, sess.run(w1)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;w2:\n&quot;</span>, sess.run(w2)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 训练模型</span></span><br><span class="line">    STEPS = <span class="number">3000</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(STEPS):</span><br><span class="line">        start = (i * BATCH_SIZE) % <span class="number">32</span></span><br><span class="line">        end = start + BATCH_SIZE   </span><br><span class="line">        sess.run(train_step, feed_dict = &#123;x: X[start: end], y_: Y[start, end]&#125;)</span><br><span class="line">        <span class="keyword">if</span> i  % <span class="number">500</span> == <span class="number">0</span>:</span><br><span class="line">            total_loss = sess.run(loss, feed_dict = &#123;x: X, y_: Y&#125;)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;After %d training stap(s), loss on all data is %g&quot;</span> % (i, total_loss))</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;\n&quot;</span></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;w1:\n&quot;</span>, sess.run(w1)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;w2:\n&quot;</span>, sess.run(w2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># w1:</span></span><br><span class="line"><span class="comment"># [[-0.81131822   1.48459876  0.06532937]</span></span><br><span class="line"><span class="comment">#  [-2.4427042    0.0992484   0.59122431]]</span></span><br><span class="line"><span class="comment"># w2:</span></span><br><span class="line"><span class="comment"># [[-0.81131822]</span></span><br><span class="line"><span class="comment">#  [ 1.48459876]</span></span><br><span class="line"><span class="comment">#  [ 0.06532937]]</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># After 0 training step(s), loss on all data is 5.13118</span></span><br><span class="line"><span class="comment"># After 500 training step(s), loss on all data is 0.429111</span></span><br><span class="line"><span class="comment"># After 1000 training step(s), loss on all data is 0.409789</span></span><br><span class="line"><span class="comment"># After 1500 training step(s), loss on all data is 0.399923</span></span><br><span class="line"><span class="comment"># After 2000 training step(s), loss on all data is 0.394146</span></span><br><span class="line"><span class="comment"># After 2500 training step(s), loss on all data is 0.390597</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># w1:</span></span><br><span class="line"><span class="comment"># [[-0.70006633   0.9136318   0.08953571]</span></span><br><span class="line"><span class="comment">#  [-2.3402493    -0.14641267 0.58823055]]</span></span><br><span class="line"><span class="comment"># w2:</span></span><br><span class="line"><span class="comment"># [[-0.06024267]</span></span><br><span class="line"><span class="comment">#  [ 0.91956186]</span></span><br><span class="line"><span class="comment">#  [-0.0682071 ]]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="搭建神经网络步骤"><a href="#搭建神经网络步骤" class="headerlink" title="搭建神经网络步骤"></a>搭建神经网络步骤</h2><p>1 准备</p>
+<blockquote>
+<p>import<br>常量定义<br>生成数据集</p>
+</blockquote>
+<p>2 前向传播：定义输入、参数和输出</p>
+<blockquote>
+<p>x  &#x3D;<br>y_ &#x3D;</p>
+<p>w1 &#x3D;<br>w2 &#x3D;</p>
+<p>a &#x3D;<br>y &#x3D; </p>
+</blockquote>
+<p>3 反向传播：定义损失函数、反向传播方法</p>
+<blockquote>
+<p>loss &#x3D;<br>train_step &#x3D; </p>
+</blockquote>
+<p>4 生成会话，训练STEPS轮</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    STEPS = </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(STEPS):</span><br><span class="line">        start = </span><br><span class="line">        end = </span><br><span class="line">        sess.run(train_step, feed_dict)</span><br></pre></td></tr></table></figure>
+
+
+<hr />
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>smart zhi
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://smart-zhi.github.io/2019/Tensorflow02/" title="Tensorflow笔记（第二讲）">https://smart-zhi.github.io/2019/Tensorflow02/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MOOC/" rel="tag"># MOOC</a>
+              <a href="/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/Tensorflow01/" rel="prev" title="Tensorflow笔记（第一讲）">
+                  <i class="fa fa-chevron-left"></i> Tensorflow笔记（第一讲）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/Tensorflow03/" rel="next" title="神经网络优化">
+                  神经网络优化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smart zhi</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">18k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">16 分钟</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"Smart-zhi/blog_common","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

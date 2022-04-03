@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CRoboto+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"smart-zhi.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.11.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"utterances","storage":true,"lazyload":false,"nav":null,"activeClass":"utterances"},"stickytabs":true,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta property="og:type" content="article">
+<meta property="og:title" content="边缘检测">
+<meta property="og:url" content="https://smart-zhi.github.io/2019/CNN01/">
+<meta property="og:site_name" content="Small box">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0065saiygy1g288zo2mgyg30hs0cw0vc.gif">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0065saiygy1g2895dhdllg30ev08b0x5.gif">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0065saiygy1g2cd536jdlj30gt04ia9w.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0065saiygy1g2ckkpd2i8j30mi0lk0u1.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0065saiygy1g2clajy42zj30fc05vdhb.jpg">
+<meta property="article:published_time" content="2019-04-19T12:48:42.000Z">
+<meta property="article:modified_time" content="2022-04-03T16:49:27.113Z">
+<meta property="article:author" content="smart zhi">
+<meta property="article:tag" content="图像">
+<meta property="article:tag" content="边缘检测">
+<meta property="article:tag" content="卷积">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/0065saiygy1g288zo2mgyg30hs0cw0vc.gif">
+
+
+<link rel="canonical" href="https://smart-zhi.github.io/2019/CNN01/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://smart-zhi.github.io/2019/CNN01/","path":"2019/CNN01/","title":"边缘检测"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>边缘检测 | Small box</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Small box</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">a small box for personal note</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">卷积计算方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E7%A4%BA%E6%84%8F"><span class="nav-number">1.1.</span> <span class="nav-text">卷积计算方法示意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">卷积计算示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="nav-number">2.</span> <span class="nav-text">边缘检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="nav-number">2.1.</span> <span class="nav-text">垂直边缘检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E8%BF%87%E6%B8%A1"><span class="nav-number">2.2.</span> <span class="nav-text">边缘过渡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E6%A3%80%E6%B5%8B"><span class="nav-number">2.2.2.</span> <span class="nav-text">水平检测</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%A7%8D%E7%B1%BB"><span class="nav-number">2.3.</span> <span class="nav-text">滤波器种类</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="smart zhi"
+      src="/images/1.jpg">
+  <p class="site-author-name" itemprop="name">smart zhi</p>
+  <div class="site-description" itemprop="description">personal note</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Smart-zhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Smart-zhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1490295322@qq.com" title="E-Mail → mailto:1490295322@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://smart-zhi.github.io/2019/CNN01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/1.jpg">
+      <meta itemprop="name" content="smart zhi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Small box">
+      <meta itemprop="description" content="personal note">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="边缘检测 | Small box">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          边缘检测
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-19 20:48:42" itemprop="dateCreated datePublished" datetime="2019-04-19T20:48:42+08:00">2019-04-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-04-04 00:49:27" itemprop="dateModified" datetime="2022-04-04T00:49:27+08:00">2022-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CNN/" itemprop="url" rel="index"><span itemprop="name">CNN</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p class="description"></p>
+
+<span id="more"></span>
+
+<h2 id="卷积计算方法"><a href="#卷积计算方法" class="headerlink" title="卷积计算方法"></a>卷积计算方法</h2><h3 id="卷积计算方法示意"><a href="#卷积计算方法示意" class="headerlink" title="卷积计算方法示意"></a>卷积计算方法示意</h3><p><img src="http://ww1.sinaimg.cn/large/0065saiygy1g288zo2mgyg30hs0cw0vc.gif" alt="cnn001_001" title="卷积计算示意图"></p>
+<h3 id="卷积计算示例"><a href="#卷积计算示例" class="headerlink" title="卷积计算示例"></a>卷积计算示例</h3><p>$$<br>\begin{bmatrix}<br>3&amp;3&amp;2&amp;1&amp;0\<br>0&amp;0&amp;1&amp;3&amp;1\<br>3&amp;1&amp;2&amp;2&amp;3\<br>2&amp;0&amp;0&amp;2&amp;2\<br>2&amp;0&amp;0&amp;0&amp;1\<br>\end{bmatrix} *<br>\begin{bmatrix}<br>0&amp;1&amp;2\<br>2&amp;2&amp;0\<br>0&amp;1&amp;2\<br>\end{bmatrix} &#x3D;<br>\begin{bmatrix}<br>12&amp;12&amp;17\<br>10&amp;17&amp;19\<br>9&amp;6&amp;14\<br>\end{bmatrix}<br>$$</p>
+<p><img src="http://ww1.sinaimg.cn/large/0065saiygy1g2895dhdllg30ev08b0x5.gif" alt="cnn001_002" title="卷积计算示例"></p>
+<h2 id="边缘检测"><a href="#边缘检测" class="headerlink" title="边缘检测"></a>边缘检测</h2><h3 id="垂直边缘检测"><a href="#垂直边缘检测" class="headerlink" title="垂直边缘检测"></a>垂直边缘检测</h3><p>$$<br>\begin{bmatrix}<br>10&amp;10&amp;10&amp;0&amp;0&amp;0\<br>10&amp;10&amp;10&amp;0&amp;0&amp;0\<br>10&amp;10&amp;10&amp;0&amp;0&amp;0\<br>10&amp;10&amp;10&amp;0&amp;0&amp;0\<br>10&amp;10&amp;10&amp;0&amp;0&amp;0\<br>10&amp;10&amp;10&amp;0&amp;0&amp;0\<br>\end{bmatrix} *<br>\begin{bmatrix}<br>1&amp;0&amp;-1\<br>1&amp;0&amp;-1\<br>1&amp;0&amp;-1\<br>\end{bmatrix} &#x3D;<br>\begin{bmatrix}<br>0&amp;30&amp;30&amp;0\<br>0&amp;30&amp;30&amp;0\<br>0&amp;30&amp;30&amp;0\<br>0&amp;30&amp;30&amp;0\<br>\end{bmatrix}<br>$$</p>
+<p><img src="http://ww1.sinaimg.cn/large/0065saiygy1g2cd536jdlj30gt04ia9w.jpg" alt="cnn001_003" title="边缘检测示意图"></p>
+<h3 id="边缘过渡"><a href="#边缘过渡" class="headerlink" title="边缘过渡"></a>边缘过渡</h3><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><blockquote>
+<p>取绝对值可以忽略过度<br>不取绝对值，可以得到过度信息</p>
+</blockquote>
+<p><img src="http://ww1.sinaimg.cn/large/0065saiygy1g2ckkpd2i8j30mi0lk0u1.jpg" alt="cnn001_004" title="边缘过度"></p>
+<h4 id="水平检测"><a href="#水平检测" class="headerlink" title="水平检测"></a>水平检测</h4><p><img src="http://ww1.sinaimg.cn/large/0065saiygy1g2clajy42zj30fc05vdhb.jpg" alt="cnn001_005" title="水平边缘检测"></p>
+<h3 id="滤波器种类"><a href="#滤波器种类" class="headerlink" title="滤波器种类"></a>滤波器种类</h3><p>$$\begin{bmatrix}<br>1&amp;0&amp;-1\<br>2&amp;0&amp;-2\<br>1&amp;0&amp;-1\<br>\end{bmatrix}\ \ \ \ \ \ \<br>\begin{bmatrix}<br>3&amp;0&amp;-3\<br>10&amp;0&amp;-10\<br>3&amp;0&amp;-3\<br>\end{bmatrix}\ \ \ \ \ \ \<br>\begin{bmatrix}<br>\omega _1&amp;\omega _2&amp;\omega _3\<br>\omega _4&amp;\omega _5&amp;\omega _6\<br>\omega _7&amp;\omega _8&amp;\omega _9\<br>\end{bmatrix}<br>$$</p>
+<center>
+
+<p><b>sobe fitter &amp;emsp; &amp;emsp; &amp;emsp; &amp;emsp;  scharr fitter  &amp;emsp; &amp;emsp; &amp;emsp; &amp;emsp;  训练滤波器</b></p>
+</center>
+
+<hr/>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>smart zhi
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://smart-zhi.github.io/2019/CNN01/" title="边缘检测">https://smart-zhi.github.io/2019/CNN01/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%83%8F/" rel="tag"># 图像</a>
+              <a href="/tags/%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B/" rel="tag"># 边缘检测</a>
+              <a href="/tags/%E5%8D%B7%E7%A7%AF/" rel="tag"># 卷积</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/mysql002/" rel="prev" title="MySQL 基础">
+                  <i class="fa fa-chevron-left"></i> MySQL 基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/Tensorflow01/" rel="next" title="Tensorflow笔记（第一讲）">
+                  Tensorflow笔记（第一讲） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smart zhi</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">18k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">16 分钟</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="https://cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"Smart-zhi/blog_common","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
